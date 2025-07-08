@@ -29,10 +29,13 @@ expired = False
 wrong_secret = False
 
 try:
-    decoded_bytes = base64.b64decode(args.key)
-    decoded_str = decoded_bytes.decode('utf-8')
-    decoded_list = ast.literal_eval(decoded_str)
-    expiry_time = datetime.datetime.fromtimestamp(int(float(decoded_list[0])))
+    b64decoded = base64.b64decode(args.key)
+    # base64 decode returns bytes under Python 3.  Convert to a string
+    # before processing the list representation.
+    decoded_str = b64decoded.decode('utf-8')
+    decoded_list = decoded_str.strip('[]').replace("'", "").split(', ')
+    decoded = decoded_list[0]
+    expiry_time = datetime.datetime.fromtimestamp(int(float(decoded)))
     now_tuple = now.timetuple()
     timestamp = time.mktime(now_tuple)
     today = datetime.datetime.fromtimestamp(int(float(timestamp)))
