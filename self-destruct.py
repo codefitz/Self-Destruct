@@ -9,6 +9,7 @@ import os
 import argparse
 from argparse import RawTextHelpFormatter
 import base64
+import binascii
 import time
 import ast
 
@@ -41,8 +42,8 @@ try:
     if decoded_list[1] != "random_key":
         wrong_secret = True
         destroy = True
-except:
-    print("There is a problem with the key!")
+except (ValueError, binascii.Error) as exc:
+    print(f"There is a problem with the key: {exc}")
     sys.exit(1)
 
 if args.fakeout:
