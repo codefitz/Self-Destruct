@@ -29,8 +29,11 @@ wrong_secret = False
 
 try:
     b64decoded = base64.b64decode(args.key)
-    decoded_list = b64decoded.strip('][').replace("'", "").split(', ')
-    decoded = bytes.decode(decoded_list[0])
+    # base64 decode returns bytes under Python 3.  Convert to a string
+    # before processing the list representation.
+    decoded_str = b64decoded.decode('utf-8')
+    decoded_list = decoded_str.strip('[]').replace("'", "").split(', ')
+    decoded = decoded_list[0]
     expiry_time = datetime.datetime.fromtimestamp(int(float(decoded)))
     now_tuple = now.timetuple()
     timestamp = time.mktime(now_tuple)
