@@ -10,6 +10,7 @@ import argparse
 from argparse import RawTextHelpFormatter
 import base64
 import time
+import ast
 
 pwd = os.getcwd()
 
@@ -28,10 +29,10 @@ expired = False
 wrong_secret = False
 
 try:
-    b64decoded = base64.b64decode(args.key)
-    decoded_list = b64decoded.strip('][').replace("'", "").split(', ')
-    decoded = bytes.decode(decoded_list[0])
-    expiry_time = datetime.datetime.fromtimestamp(int(float(decoded)))
+    decoded_bytes = base64.b64decode(args.key)
+    decoded_str = decoded_bytes.decode('utf-8')
+    decoded_list = ast.literal_eval(decoded_str)
+    expiry_time = datetime.datetime.fromtimestamp(int(float(decoded_list[0])))
     now_tuple = now.timetuple()
     timestamp = time.mktime(now_tuple)
     today = datetime.datetime.fromtimestamp(int(float(timestamp)))
@@ -48,9 +49,8 @@ except:
 if args.fakeout:
     print("Debugging..")
     print("now:",now)
-    print("b64decoded:",b64decoded)
+    print("b64decoded:",decoded_bytes)
     print("decoded_list",decoded_list)
-    print("decoded:",decoded)
     print("expiry_time:",expiry_time)
     print("now_tuple:",now_tuple)
     print("timestamp:",timestamp)
