@@ -20,7 +20,6 @@ parser = argparse.ArgumentParser(description='Self Destruct',formatter_class=Raw
 parser.add_argument('-k', '--key', dest='key',  type=str, required=True, help='Safety Key.', metavar='<key>')
 parser.add_argument('-f', '--fakeout', dest='fakeout', action='store_true', required=False, help=argparse.SUPPRESS)
 
-global args
 args = parser.parse_args()
 
 now = datetime.date.today()
