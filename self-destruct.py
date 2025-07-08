@@ -62,15 +62,14 @@ elif destroy:
     print("This script has expired and will now self-destruct.")
     print("Removing %s..."%sys.argv[0])
     if sys.platform == "win32":
-        delbat = open("c:\\temp\\_{0}.bat".format(args.key),'w+')
-        delbat.write('''
+        with open("c:\\temp\\_{0}.bat".format(args.key), 'w', encoding='utf-8') as delbat:
+            delbat.write('''
                         @echo off
                         :Repeat
                         del "{0}" > nul 2> nul
                         if exist "{0}" goto Repeat
                         del "c:\temp\_{1}.bat";
                     '''.format(sys.argv[0],args.key))
-        delbat.close()
         os.startfile(r"c:\temp\_{0}.bat".format(args.key))
     else: # Linux Desktop
         os.remove("%s"%sys.argv[0])
